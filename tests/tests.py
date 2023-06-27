@@ -34,3 +34,15 @@ class TestInit(TestParser):
 
       def test_muuuur_last_chapter(self):
           self.assertEqual(self.mur_chant.content_chapters[5-1].split('</title>')[0], '<title><p>Глава пятая</p>')
+
+      def test_bulgakov_tokenizer(self):
+          self.assertEqual(len(self.bulgakov.tokenize(2)), 2849)
+
+      def test_little_prince_tokenizer(self):
+          self.assertEqual(len(self.little_prince.tokenize(2)), 248)
+
+      def test_monte_cristo_tokenizer(self):
+          self.assertEqual(len(self.monte_cristo.tokenize(2)), 1004)
+
+      def test_muuuur_tokenizer(self):
+           self.assertEqual(len(self.mur_chant.tokenize(2)), 1472)

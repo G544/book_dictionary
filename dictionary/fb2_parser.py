@@ -1,6 +1,9 @@
 
 from chardet.universaldetector import UniversalDetector
 import re
+import nltk
+from nltk.tokenize import word_tokenize
+nltk.download('punkt')
 
 
 class Pars_and_tokenize():
@@ -63,3 +66,16 @@ class Pars_and_tokenize():
 
         text = re.sub('<image(.+?)/>', '', text, flags=re.DOTALL)
         return text
+
+    def tokenize(self, num_chapt):
+        return self._tokenize(self.content_chapters[num_chapt-1])
+
+    def _tokenize(self, text, language = 'russian'):
+        count_words = {}
+        for word in word_tokenize(text.lower(), language= language):
+            if word in count_words:
+                count_words[word]+= 1
+            else:
+                count_words[word] = 1
+
+        return count_words
