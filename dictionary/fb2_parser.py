@@ -3,6 +3,7 @@ from chardet.universaldetector import UniversalDetector
 import re
 import nltk
 from nltk.tokenize import word_tokenize
+from deep_translator import GoogleTranslator
 nltk.download('punkt')
 
 
@@ -68,14 +69,52 @@ class Pars_and_tokenize():
         return text
 
     def tokenize(self, num_chapt):
-        return self._tokenize(self.content_chapters[num_chapt-1])
+        return self._tokenize(self.clean_content(num_chapt))
 
     def _tokenize(self, text, language = 'russian'):
+        punctuation_marks_nums = ['"',"'",'.',',','!','?','-',';',':','(',')','–','—','/','<','>','0','1','2','3','4','5','6','7','8','9']
+        flag = False
         count_words = {}
         for word in word_tokenize(text.lower(), language= language):
+            for mark in punctuation_marks_nums:
+                if mark in word:
+                    flag = True
+                    break
+            if flag:
+                flag = False
+                continue
             if word in count_words:
                 count_words[word]+= 1
             else:
                 count_words[word] = 1
 
         return count_words
+
+
+
+    def translator(self, num_chapt, des_language, init_language='auto', extend = False):
+        translator = GoogleTranslator(source=init_language, target=des_language)
+        tokens = list(self.tokenize(num_chapt).keys())
+        length = len(tokens)
+        data = []
+        x = 0
+        while length >= 250:
+            data.append('\n '.join(tokens[x:x + 250]))
+            x += 250
+            length -= 250
+        data.append('\n '.join(tokens[x:]))
+        translated_content = []
+        for word in data:
+            translated_content.append(translator.translate(word))
+        translated_content = '\n'. join(translated_content).split('\n')
+        init_content = '\n'.join(data).split('\n')
+        dictionary = {a:b for a,b in zip(init_content, translated_content)}
+        if extend:
+            return dictionary, init_content, translated_content
+        else:
+            return dictionary
+
+    def write_to_file(self, file_name, dictionary):
+        text = '\n'.join(list(' : '.join(pair) for pair in (dictionary.items())))
+        with open(file_name, 'w') as f:
+            f.write(text)

@@ -36,13 +36,25 @@ class TestInit(TestParser):
           self.assertEqual(self.mur_chant.content_chapters[5-1].split('</title>')[0], '<title><p>Глава пятая</p>')
 
       def test_bulgakov_tokenizer(self):
-          self.assertEqual(len(self.bulgakov.tokenize(2)), 2849)
+          self.assertEqual(len(self.bulgakov.tokenize(2)), 2706)
 
       def test_little_prince_tokenizer(self):
-          self.assertEqual(len(self.little_prince.tokenize(2)), 248)
+          self.assertEqual(len(self.little_prince.tokenize(2)),223)
 
       def test_monte_cristo_tokenizer(self):
-          self.assertEqual(len(self.monte_cristo.tokenize(2)), 1004)
+          self.assertEqual(len(self.monte_cristo.tokenize(2)), 945)
 
       def test_muuuur_tokenizer(self):
-           self.assertEqual(len(self.mur_chant.tokenize(2)), 1472)
+           self.assertEqual(len(self.mur_chant.tokenize(2)), 1401)
+
+      def test_bulgakov_translator(self):
+          self.assertEqual(list(self.bulgakov.translator(1, 'en').items())[3][1], ' stanza')
+
+      def test_monte_cristo_translator(self):
+          self.assertEqual(list(self.monte_cristo.translator(1, 'en').items())[3][1], ' de')
+
+      def test_muur_translator(self):
+          self.assertEqual(list(self.mur_chant.translator(1, 'en').items())[3][1], ' chant')
+
+      def test_little_prince_translator(self):
+          self.assertEqual(list(self.little_prince.translator(1, 'en').items())[3][1],  ' children')
