@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <html>
+    <head>
+    <title>success</title>
+    </head>
+    <body>
+    <p>File uploaded successfully</p>
+    <p>File Name: {{name}}</p>
+    <div>There are 4 types of converting. Please choose one of them</div>
+            <ol>
+                <li>Chapter mode - convert into dictionary only one definite chapter </li>
+                <li> Chapters mode - convert full book and divide it into chapters. Each new chapters contains
+                    only new words, which haven't met in previous chapters </li>
+                <li> Chapters -extended mode -  convert full book and divide it into chapters.
+                    (Warning - if you choose this mode you will recieve very large dictionary, because some words will
+                    occure twice and more times</li>
+                <li> Full book mode -  convert book into dictionary with all words</li>
+            </ol>
+    <form action = "/convert_step" method = "post">
+    <input type = "submit" name="chapter" value="Chapter mode">
+    <input type = "submit" name="chapters" value="Chapters mode">
+    <input type = "submit" name="chapters_ex" value="Chapters extended mode">
+    <input type = "submit" name="book" value="Full book">
+    </form>
+    </body>
+    </html>
+{% endblock %}

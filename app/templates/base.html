@@ -1,0 +1,25 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Book Dictionary</title>
+      {% else %}
+      <title>Welcome to book-dictionary</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Book-dictionary: <a href="/upload">Home</a> </div>
+            <h1>Hello! Welcome to the book-dictionary project</h1>
+            <h3>Short instruction for users: </h3>
+            <div>Here you can convert your book into full dictionary with all words.
+                I find it very convenient for me to read foreign books in such way.
+                Follow the next several steps to convert your book</div>
+            <ol>
+                <li> 1. Upload your book in fb2 </li>
+                <li> 2. Choose the convenienst mode for you </li>
+                <li> 3. Wait a bit( not more tan 5 minutes) </li>
+                <li> 4. Download your dictionary</li>
+            </ol>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>

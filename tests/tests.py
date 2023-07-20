@@ -4,11 +4,10 @@ import unittest
 
 class TestParser(unittest.TestCase):
       def setUp(self):
-          self.bulgakov = Pars_and_tokenize('C:/Users/79689/PycharmProjects/book_dictionary/books/Bulgakov_Mihail__Master_i_Margarita__Readli.Net_256.fb2')
-          self.monte_cristo = Pars_and_tokenize('C:/Users/79689/PycharmProjects/book_dictionary/books/498373.fb2')
-          self.little_prince = Pars_and_tokenize('C:/Users/79689/PycharmProjects/book_dictionary/books/65.fb2')
-          self.mur_chant = Pars_and_tokenize('C:/Users/79689/PycharmProjects/book_dictionary/books/81695427.fb2')
-
+          self.bulgakov = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/Bulgakov_Mihail__Master_i_Margarita__Readli.Net_256.fb2')
+          self.monte_cristo = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/498373.fb2')
+          self.little_prince = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/65.fb2')
+          self.mur_chant = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/81695427.fb2')
 
 class TestInit(TestParser):
       def test_bulgakov_num_chapters(self):
@@ -35,3 +34,27 @@ class TestInit(TestParser):
 
       def test_muuuur_last_chapter(self):
           self.assertEqual(self.mur_chant.content_chapters[5-1].split('</title>')[0], '<title><p>Глава пятая</p>')
+
+      def test_bulgakov_tokenizer(self):
+          self.assertEqual(len(self.bulgakov.tokenize(2)), 2682)
+
+      def test_little_prince_tokenizer(self):
+          self.assertEqual(len(self.little_prince.tokenize(2)),221)
+
+      def test_monte_cristo_tokenizer(self):
+          self.assertEqual(len(self.monte_cristo.tokenize(2)), 942)
+
+      def test_muuuur_tokenizer(self):
+           self.assertEqual(len(self.mur_chant.tokenize(2)), 1387)
+
+      def test_bulgakov_translator(self):
+          self.assertEqual(list(self.bulgakov.translator(1, 'en').items())[19][1], 'atheism')
+
+      def test_monte_cristo_translator(self):
+          self.assertEqual(list(self.monte_cristo.translator(1, 'en').items())[7][1], 'baron')
+
+      def test_muur_translator(self):
+          self.assertEqual(list(self.mur_chant.translator(1, 'en').items())[3][1], 'basics')
+
+      def test_little_prince_translator(self):
+          self.assertEqual(list(self.little_prince.translator(1, 'en').items())[3][1],  'was')
