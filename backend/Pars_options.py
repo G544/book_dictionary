@@ -1,5 +1,7 @@
-from docx.enum.section import WD_ORIENT
-
+from docx.enum.section import WD_ORIENTATION
+from backend.fb2_parser import Pars_and_tokenize
+from docx import Document
+from docx.oxml.ns import qn
 
 class Book_Dictionary():
     def __init__(self, file, end_file, lang='bulgarian', mode="chapter", chapter=False):
@@ -22,16 +24,18 @@ class Book_Dictionary():
         cols.set(qn('w:num'), '4')
         cols.set(qn('w:space'), '20')  # Set space between columns to 10 points ->0.01"
         new_width, new_height = section.page_height, section.page_width
-        section.orientation = WD_ORIENT.LANDSCAPE
+        section.orientation = WD_ORIENTATION.LANDSCAPE
         section.page_width = new_width
         section.page_height = new_height
-        if mode == 'chapter':
+
+    def convert(self):
+        if self.mode == 'chapter':
             self.chapter_mode()
-        elif mode == 'chapters':
+        elif self.mode == 'chapters':
             self.chapters_mode()
-        elif mode == 'chapters_ex':
+        elif self.mode == 'chapters_ex':
             self.chapters_mode_ex()
-        elif mode == 'book':
+        elif self.mode == 'book':
             self.book_mode()
         else:
             print('Wrong value for mode')
