@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>language</title>
+</head>
+<body>
+<h3><font size="5"  face="Cursive"> Select the second language for dictionary</font></h3>
+    </form>
+         <form method="POST" action="/mode_step">
+        <select name="language">
+      <option value="{{languages[0]}}" selected>{{languages[0]}}</option>
+      {% for language in languages[1:] %}
+        <option value="{{language}}">{{language}}</option>
+      {% endfor %}
+        </select>
+      <input type="submit" value ="Submit">
+      </form>
+</body>
+</html>
+{% endblock %}

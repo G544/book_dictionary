@@ -6,7 +6,7 @@
     <title>success</title>
     </head>
     <body>
-    <h3><font size="5"  face="Cursive">There are 4 types of converting. Please choose one of them</font></h3>
+    <h3><font size="6"  face="Cursive">There are 4 types of converting. Please choose one of them</font></h3>
             <ol><font size="5"  face="Cursive">
                 <li>Chapter mode - convert into dictionary only one definite chapter </li>
                 <li> Chapters mode - convert full book and divide it into chapters. Each new chapters contains
@@ -16,13 +16,9 @@
                     occure twice and more times</li>
                 <li> Full book mode -  convert book into dictionary with all words</li></font>
             </ol>
-    <form action = "/chapter" method = "post">
-          <input type = "submit" name="chapter" value="Chapter mode">
-            </form>
     <form action = "/convert_step" method = "post">
-        <input type = "submit" name="chapters" value="Chapters mode">
-        <input type = "submit" name="chapters_ex" value="Chapters extended mode">
-        <input type = "submit" name="book" value="Full book">
+    <input type = "number" name="chapter"  placeholder="12">
+    <input type = "submit" name="submit" value="Submit">
     </form>
     </body>
     </html>

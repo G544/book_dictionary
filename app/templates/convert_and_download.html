@@ -5,9 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <title>convert</title>
-    <div>{{ value }}</div>
 </head>
-<body>
+ <body>
+ <div><font size="5"  face="Cursive">You can download you dictionary!</font></div>
+       <p><a href="{{ url_for('download', filename=filename) }}">File</a><p>
+       <form method = "post">
+                <input type = "submit" name="home" value="Convert another book">
+            </form>
+
 
 </body>
 </html>

@@ -4,18 +4,14 @@ from docx import Document
 from docx.oxml.ns import qn
 
 class Book_Dictionary():
-    def __init__(self, file, end_file, lang='bulgarian', mode="chapter", chapter=False):
+    def __init__(self, file, lang):
         ''' Modes = 'Chapter' - extract only define chapter,
         "chapters" - all but each new chapter conatins only new words,
         "chapters_ex" - all book but divided for chapters
         'Book' - dictionary for all book
         '''
-        self.filename = file
-        self.mode = mode
-        self.end_file = end_file
         self.lang = lang
-        if mode == "chapter" and chapter:
-            self.chapter = chapter
+        self.filename = file
         self.book = Pars_and_tokenize(self.filename)
         self.document = Document()
         section = self.document.sections[0]
@@ -28,14 +24,17 @@ class Book_Dictionary():
         section.page_width = new_width
         section.page_height = new_height
 
-    def convert(self):
-        if self.mode == 'chapter':
+    def convert(self,end_file, mode="chapter", chapter=1):
+        self.end_file = end_file
+        if mode == "chapter" and chapter:
+            self.chapter = chapter
+        if mode == 'chapter':
             self.chapter_mode()
-        elif self.mode == 'chapters':
+        elif mode == 'chapters':
             self.chapters_mode()
-        elif self.mode == 'chapters_ex':
+        elif mode == 'chapters_ex':
             self.chapters_mode_ex()
-        elif self.mode == 'book':
+        elif mode == 'book':
             self.book_mode()
         else:
             print('Wrong value for mode')
