@@ -1,11 +1,12 @@
-from dictionary.fb2_parser import Pars_and_tokenize
+from backend.fb2_parser import Pars_and_tokenize
 import unittest
 
 
 class TestParser(unittest.TestCase):
       def setUp(self):
-          self.bulgakov = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/Bulgakov_Mihail__Master_i_Margarita__Readli.Net_256.fb2')
           self.monte_cristo = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/498373.fb2')
+          self.bulgakov = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/Bulgakov_Mihail__Master_i_Margarita__Readli.Net_256.fb2')
+
           self.little_prince = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/65.fb2')
           self.mur_chant = Pars_and_tokenize('C:/Users/79689/Documents/GitHub/book_dictionary/books/81695427.fb2')
 
