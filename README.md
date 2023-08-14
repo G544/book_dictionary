@@ -1,6 +1,3 @@
-
-Hi! Here you can find a website, where my project was deployed:
-http://galina.pythonanywhere.com/upload
 #### Short description
 The main aim of this project turn reading books on foreign languages 
 into fun and relax but without missing the learning part. I am a big 
