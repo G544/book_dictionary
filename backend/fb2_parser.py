@@ -17,7 +17,7 @@ class Pars_and_tokenize():
             '\xa0', '<emphasis>', '</emphasis>', '<section>', '</section>',
             '<epigraph>', '</epigraph>', '<cite>', '</cite>', '<table>', '</table>'
             '<empty-line>', '</empty-line>', '<a>', '</a>', '<binary>', '</binary>']
-    PUNCT_MARKS = ['``', '"', "«", "»", "'", '.', '…', ',', '!', '?', '-', ';', ':', '(', ')',
+    PUNCT_MARKS = ['``', '``', '"', "«", "»", "'", '.', '…', ',', '!', '?', '-', ';', ':', '(', ')',
                    '–', '—', '/', '<', '>', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     BATCH_SIZE_TRANSLATE = 250
 
@@ -68,13 +68,15 @@ class Pars_and_tokenize():
 # dividing text without tags into tokens and removing words with digits or punctuatin marks
     def tokenize(self, num_chapt, language = 'russian'):
         # it is better to redo by using regex something like \w+
-        tokenized_data = list(filter(lambda x: not set(x).intersection(self.PUNCT_MARKS),
+      #  tokenized_data = list(filter(lambda x: not set(x).intersection(self.PUNCT_MARKS),
+                             #        word_tokenize(self.clean_content(num_chapt).lower(), language= language)))
+        tokenized_data = list(filter(lambda x: x.isalpha(),
                                      word_tokenize(self.clean_content(num_chapt).lower(), language= language)))
         count_words = dict(Counter(tokenized_data))
         return count_words
 
 
-    def translator(self, num_chapt, des_language, init_language='auto', extend = False):
+    def translator(self, num_chapt, des_language, init_language='auto', extend = False, headings = True):
         translator = GoogleTranslator(source=init_language, target=des_language)
         tokens = list(self.tokenize(num_chapt).keys())
         number_of_tokens = len(tokens)
@@ -103,12 +105,14 @@ class Pars_and_tokenize():
                     inv_dict[t].append(w.lstrip())
                 else:
                     inv_dict[t] = [w.lstrip()]
+        dictionary = {}
         for k, v in inv_dict.items():
             dictionary[' ,'.join(v)] = k
-        # adding divide into first letters
-        head_letters = set([s[0].title() for s in list(dictionary.keys())])
-        for letter in head_letters:
-            dictionary[letter] = '  '
+    # adding divide into first letters
+        if headings:
+            head_letters = set([s[0].title() for s in list(dictionary.keys())])
+            for letter in head_letters:
+                dictionary[letter] = '  '
         dictionary = dict(sorted(dictionary.items(), key=lambda x: x[0].lower()))
         if extend:
             return dictionary, init_content, translated_content

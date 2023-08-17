@@ -14,27 +14,31 @@ def upload():
         os.mkdir(application.config['UPLOAD_FOLDER'])
     except FileExistsError:
         pass
-    folder = os.path.join(current_app.root_path, application.config['DOWNLOAD_FOLDER'])
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
-    folder = application.config['UPLOAD_FOLDER']
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
     return render_template("file_upload_form.html", title='Home')
+
+@application.route('/pre_upload')
+def remove_files():
+    try:
+        download_path = os.path.join(current_app.root_path, application.config['DOWNLOAD_FOLDER'])
+        filename = session.get('filename', None)
+        print(os.path.join(download_path, filename))
+        os.remove(os.path.join(download_path, filename))
+    except TypeError:
+        pass
+    except FileNotFoundError:
+        pass
+    try:
+        upload_path = application.config['UPLOAD_FOLDER']
+        filename = str(session.get('my_var', None))
+        print(filename)
+        print(os.path.join(upload_path, filename))
+        os.remove(os.path.join(upload_path, filename))
+    except TypeError:
+        pass
+    except FileNotFoundError:
+        pass
+    return redirect('/upload')
+
 
 @application.route('/language', methods=['POST','GET'])
 def dropdown():
@@ -83,12 +87,9 @@ def download_page():
              final_doc = 'full_book_' + final_doc
              book.convert(mode='book', end_file='\\'.join([download_path,final_doc]))
          elif 'home' in request.form:
-             filename = session.get('filename', None)
-             print(os.path.join(download_path, filename))
-             os.remove(os.path.join(download_path, filename))
-             return redirect('/upload')
+             return redirect('/pre_upload')
          else:
-             return redirect('/upload')#s/' + final_doc)
+             return redirect('/pre_upload')#s/' + final_doc)
          return render_template('convert_and_download.html', filename=final_doc)
 
 @application.route('/download/<filename>', methods=['GET', 'POST'])

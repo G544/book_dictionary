@@ -28,6 +28,7 @@ class Book_Dictionary():
         section.page_width = new_width
         section.page_height = new_height
 
+
     def convert(self,end_file, mode="chapter", chapter=1):
         self.end_file = end_file
         # define the number of chapter for mode which convert only one chapter
@@ -60,7 +61,7 @@ class Book_Dictionary():
     def chapters_mode(self):
         full_dict = []
         for i in range(self.book.num_chapters):
-            full_chapter = self.book.translator(i, self.lang)
+            full_chapter = self.book.translator(i, self.lang, headings=False)
             new_chapter = full_chapter # may be we don't need here two variables?
             # Remove words which occured in previous chapters
             list(map(new_chapter.__delitem__, filter(new_chapter.__contains__, full_dict)))
