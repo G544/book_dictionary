@@ -2,9 +2,16 @@ from flask import render_template,request, session, send_from_directory,current_
 from app import application
 import os, shutil
 from werkzeug.utils import secure_filename
-from backend.Pars_options import Book_Dictionary
-from deep_translator import GoogleTranslator
+# from backend.Pars_options import Book_Dictionary
+# from deep_translator import GoogleTranslator
+from googletrans import LANGUAGES
+from backend.convert import convert_book
 
+def get_language_code(language_name, LANGUAGES):
+    for code, name in LANGUAGES.items():
+        if name.lower() == language_name.lower():
+            return code
+    return "Language not found"
 
 @application.route('/')
 @application.route('/upload')
@@ -48,8 +55,7 @@ def dropdown():
              filename = secure_filename(f.filename)
      session['my_var'] = filename
      f.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
-     gtranslator = GoogleTranslator()
-     languages = gtranslator.get_supported_languages()
+     languages = list(LANGUAGES.values())
      return render_template("language_select.html", languages=languages, name=f.filename)
 
 
@@ -69,31 +75,34 @@ def chapter_num_input():
 def download_page():
      path = application.config['UPLOAD_FOLDER']
      final_doc = 'convert_'+str(session.get('my_var', None)).replace('.fb2', '.docx')
-     language = session.get('language', None)
+     language = get_language_code(session.get('language', None), LANGUAGES)
      download_path = os.path.join(current_app.root_path, application.config['DOWNLOAD_FOLDER'])
      if request.method == 'POST':
-         book = Book_Dictionary(path + str(session.get('my_var', None)), language)
-         if 'chapter' in request.form:
-             chapter_num = int(request.form.get('chapter'))
-             final_doc = 'chapter_' + str(chapter_num)  + '_' + final_doc
-             book.convert(mode='chapter', chapter=chapter_num, end_file='\\'.join([download_path,final_doc]))
-         elif 'chapters' in request.form:
-             final_doc = 'chapters_' + final_doc
-             book.convert( mode='chapters', end_file='\\'.join([download_path,final_doc]))
-         elif 'chapters_ex' in request.form:
-             final_doc = 'chapters_ex_' + final_doc
-             book.convert( mode='chapters_ex', end_file='\\'.join([download_path,final_doc]))
-         elif 'book' in request.form:
-             final_doc = 'full_book_' + final_doc
-             book.convert(mode='book', end_file='\\'.join([download_path,final_doc]))
-         elif 'home' in request.form:
+        book = path + str(session.get('my_var', None))
+        chapter_num=''
+        if 'chapter' in request.form:
+            mode = 'chapter'
+            chapter_num = int(request.form.get('chapter'))
+        elif 'chapters' in request.form:  
+            mode = 'chapters'
+        elif 'chapters_ex' in request.form:
+            mode = 'chapter_ex'
+        elif 'book' in request.form:  
+            mode = 'book'
+        src_lang = 'russian'
+        tgt_lang = language
+        final_doc = f'{mode}_' + str(chapter_num)  + '_' + final_doc
+        filename = '//'.join([download_path,final_doc])
+        convert_book(book,mode, src_lang, tgt_lang, filename, chapter_num)
+        if 'home' in request.form:
              return redirect('/pre_upload')
-         else:
-             return redirect('/pre_upload')#s/' + final_doc)
-         return render_template('convert_and_download.html', filename=final_doc)
+        # else:
+        #      return redirect('/pre_upload')#s/' + final_doc)
+        return render_template('convert_and_download.html', filename=final_doc)
 
 @application.route('/download/<filename>', methods=['GET', 'POST'])
 def download(filename):
+     print(current_app.root_path)
      downloads = os.path.join(current_app.root_path, application.config['DOWNLOAD_FOLDER'])
      session['filename'] = filename
      return send_from_directory(downloads, filename, as_attachment=True)
