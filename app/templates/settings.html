@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Conversion Settings</h1>
+        <form action="/settings" method="post">
+            <label for="dest_language">Choose a Destination Language:</label>
+            <select name="dest_language" class="form-select">
+                {% for lang in languages %}
+                <option value="{{ lang }}">{{ lang }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="src_language">Choose a Source Language:</label>
+            <select name="src_language" class="form-select">
+                {% for lang in languages %}
+                <option value="{{ lang }}">{{ lang }}</option>
+                {% endfor %}
+            </select>
+            
+            <label class="mt-3" for="mode">Conversion Mode:</label>
+            <select name="mode" class="form-select">
+                <option value="book">Whole Book</option>
+                <option value="chapter">Single Chapter</option>
+                <option value="chapters">All Chapters</option>
+                <option value="chapters_ex">All Chapters extended</option>
+            </select>
+
+            <label class="mt-3" for="chapter">Chapter Number (optional):</label>
+            <input type="text" name="chapter" class="form-control">
+
+            <button type="submit" class="btn btn-success mt-3 w-100">Start Conversion</button>
+        </form>
+    </div>
+</body>
+</html>

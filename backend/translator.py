@@ -10,6 +10,8 @@ class Translate():
         self.all_words = self.preparation()
         self.translator = Translator()
         self.estimation()
+        self.batches = [self.all_words[i:i + self.AMOUNT] for i in range(0, len(self.all_words), self.AMOUNT)]
+        
 
 
         
@@ -33,6 +35,15 @@ class Translate():
                 translated.update({s:t for s,t in zip(batch, translated_batch.split('\n'))})
                 
         return translated
+    
+    def translation_batches(self):
+        translated = {}
+        for num_batch, batch in enumerate(self.batches):
+            translated_batch = self.translator.translate('\n'.join(batch), dest =self.lang).text
+            if len(batch) == len(translated_batch.split('\n')):
+                translated = {s:t for s,t in zip(batch, translated_batch.split('\n'))}
+            yield num_batch, translated
+        # return translated
     
     def preparation(self):
         all_words = []
