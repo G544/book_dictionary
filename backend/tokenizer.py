@@ -1,5 +1,6 @@
 from nltk.tokenize import word_tokenize
 import nltk
+nltk.data.path.append('/opt/homebrew/anaconda3/envs/book_dictionary/nltk_data/tokenizers')
 nltk.download('punkt')
 
 class PrepareWordList():
@@ -14,6 +15,7 @@ class PrepareWordList():
             tokenized_chapters = {}
             for chapter_index, chapter in self.chapters.items():
                 tokenized_chapters[chapter_index] =self._tokenization('\n'.join(chapter))
+           
             return tokenized_chapters
         else:
             print('Wrong value for mode')
@@ -21,4 +23,5 @@ class PrepareWordList():
     def _tokenization(self, text):
         tokenized_data = list(filter(lambda x: x.isalpha(),
                                      word_tokenize(text.lower(), language= self.language)))
+ 
         return tokenized_data
